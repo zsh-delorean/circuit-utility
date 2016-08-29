@@ -1,0 +1,17 @@
+#
+# Clear the screen with scissors symbols.
+#
+# Arguments:
+#   none
+# Returns:
+#   symbols equal to terminal columns
+#
+# Authors:
+#   Zsh DeLorean <https://github.com/zsh-delorean>
+#
+
+clear
+
+local s="$(printf "%-$(($(tput cols) / 2))s")"
+
+echo "${fg[yellow]}${s// / ✂}${reset_color}"

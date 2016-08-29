@@ -1,0 +1,15 @@
+#
+# Find a file, looking up through parent directories.
+#
+# Authors:
+#   Zsh DeLorean <https://github.com/zsh-delorean>
+#
+
+local dir="${PWD}"
+local target="$1"
+
+while [[ ! -e "${dir}/${target}" && "${dir}" != "/" ]]; do
+  dir="${dir:h}"
+done
+
+[[ "${dir}" != '/' ]] && echo "${dir}/${target}"

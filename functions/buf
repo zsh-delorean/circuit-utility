@@ -1,0 +1,33 @@
+#
+# Back up a file using the date.
+#
+# Arguments:
+#   file
+# Returns:
+#   backed up file location
+#
+# Authors:
+#   Zsh DeLorean <https://github.com/zsh-delorean>
+#
+
+local old="$1"
+
+if [[ -n "${old}" ]]; then
+  local dir="$(dirname "${old}")"
+  local name="$(basename "${old}")"
+  local date="-$(date +%Y-%m-%d)"
+
+  if [[ "${name}" == .* ]]; then
+    # dotfile
+  elif [[ "${name}" == *.* ]]; then
+    # extension
+    local ext=".${name##*.}"
+    name="${name%.*}"
+  fi
+
+  local new="${dir}/${name}${date}${ext}"
+
+  cp -R "${old}" "${new}"
+
+  echo "${new} has been created."
+fi
