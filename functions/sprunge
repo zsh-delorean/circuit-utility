@@ -7,7 +7,7 @@
 #   link
 #
 # Authors:
-#   Zsh DeLorean
+#   Zsh DeLorean <https://github.com/zsh-delorean>
 #
 
 curl -F 'sprunge=<-' http://sprunge.us
