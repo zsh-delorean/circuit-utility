@@ -63,24 +63,6 @@ function circuit-utility {
     grab="$(eval "$@")"
     echo ${grab}
   }
-  function fancy-ctrl-z() {
-      if [[ $#BUFFER -eq 0 ]]
-      then
-          bg
-          zle redisplay
-      else
-          zle push-line-or-edit
-      fi
-  }
-  zle -N fancy-ctrl-z
-  bindkey '^Z' fancy-ctrl-z
-
-  # Push the entire current multiline construct onto the buffer stack and return
-  # to the top-level (PS1) prompt. If the current parser construct is only a
-  # single line, this is exactly like push-line. Next time the editor starts up or
-  # is popped with get-line, the construct will be popped off the top of the
-  # buffer stack and loaded into the editing buffer.
-  #bindkey "^Q" push-input
 
   # ls
   if is-callable 'dircolors'; then
@@ -141,7 +123,7 @@ function circuit-utility {
   # Lists numerical permissions.
   function lsmod() {
     ls -l "${@:-$PWD}" | awk '{k=0;for(i=0;i<=8;i++) \
-      k+=((substr($1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf("%0o ",k);print}'
+      k+=((substr("$1",i+2,1)~/[rwx]/)*2^(8-i));if(k)printf("%0o ",k);print}'
   }
 
   # Grep
@@ -249,8 +231,9 @@ function circuit-utility {
     find . -type f -iname "*${1:-}*" -exec "${2:-file}" '{}' \;
   }
 
+  # Recover vim swap files matching passed pattern into tabs.
   function vim-recover {
-    vim -p $(find . -name "$1" | sed -e 's/.swp$//g;s/\/\./\//g;' | xargs echo)
+    vim -p $(find . -name "*${1}*.swp" | sed -e 's/.swp$//g;s/\/\./\//g;' | xargs echo)
   }
 
   # Displays user owned processes status.
@@ -258,7 +241,7 @@ function circuit-utility {
     ps -U "${1:-$LOGNAME}" -o 'pid,%cpu,%mem,command' "${(@)argv[2,-1]}"
   }
 
-  # Search all files in the current directory for a string.
+  # Search all files in the passed directory for a string.
   function fs() {
     find "$1" -print0 | xargs -0 grep "${@:2}"
   }
